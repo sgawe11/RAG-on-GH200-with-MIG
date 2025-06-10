@@ -30,13 +30,13 @@ $ docker login nvcr.io
 git clone https://gitlab-master.nvidia.com/msorkin/rag-on-gh200.git && cd rag-on-gh200
 ```
 **3. To run this RAG no MIG navigate to the apprrpriate directory and make the necessary changes to allow MIG devices ids to be recognized.**
-
+```
 nvidia-smai -L  # to check the MIG device ids
 cd ~/rag-on-gh200/RAG/examples/local_deploy
-```
+
 Edit the file "docker-compose-nim-ms.yaml" and replace all device_ids fields with your MIG device id
 (for example: device_ids: ['MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4'])
-
+```
 **4. It's time to set up some environment variables and folders. Run these commands in terminal.**
 ```
 sudo chmod +x env_setup.sh
