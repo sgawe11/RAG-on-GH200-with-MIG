@@ -29,8 +29,13 @@ $ docker login nvcr.io
 ```
 git clone https://gitlab-master.nvidia.com/msorkin/rag-on-gh200.git && cd rag-on-gh200
 ```
+**3. To run this RAG no MIG navigate to the apprrpriate directory and make the necessary changes to allow MIG devices ids to be recognized.**
 
-**3. It's time to set up some environment variables and folders. Run these commands in terminal.**
+cd ~/rag-on-gh200/RAG/examples/local_deploy
+nvidia-smai -L  # to check the MIG device ids
+Edit the file docker-compose-nim-ms.yaml and replace all device_ids fields with your MIG device id (for example: device_ids: ['MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4'])
+
+**4. It's time to set up some environment variables and folders. Run these commands in terminal.**
 ```
 sudo chmod +x env_setup.sh
 ./env_setup.sh
@@ -52,32 +57,32 @@ nvidia/llama-3.2-nv-rerankqa-1b-v2
 
 ```
 
-**4. Check the uid, and then exit before we run some `sudo chown ...` commands.**
+**5. Check the uid, and then exit before we run some `sudo chown ...` commands.**
 ```
-$ docker run --rm -it nvcr.io/nim/meta/llama-3.1-8b-instruct:1.8.4 bash
-$ id
+docker run --rm -it nvcr.io/nim/meta/llama-3.1-8b-instruct:1.8.4 bash
+id
 EXAMPLE OUTPUT: 
 uid=1000(nim) gid=1000(nim)  ... ...
-$ exit
+exit
 ```
 
-**5. If the `uid` is not `1000`, replace commands with the correct uid values. Else, simply run these commands in terminal.**
+**6. If the `uid` is not `1000`, replace commands with the correct uid values. Else, simply run these commands in terminal.**
 ```
-$ sudo chown -R 1000:1000 ~/.cache/model-cache
-$ sudo chmod -R 775 ~/.cache/model-cache
-$ sudo chown -R 1000:1000 ~/.cache/nim
-$ sudo chmod -R 775 ~/.cache/nim
+sudo chown -R 1000:1000 ~/.cache/model-cache
+sudo chmod -R 775 ~/.cache/model-cache
+sudo chown -R 1000:1000 ~/.cache/nim
+sudo chmod -R 775 ~/.cache/nim
 ```
 
 
-**6. Everything should be set up! Let's spin up the RAG solution. Run this command to deploy the containers/** 
+**7. Everything should be set up! Let's spin up the RAG solution. Run this command to deploy the containers/** 
 ```
 $ cd RAG/examples/basic_rag/langchain
 USERID=$(id -u) docker compose --profile local-nim --profile nemo-retriever --profile milvus up --build -d
 ```
 
 
-**7. Run `nvidia-smi` to see the memory usage of the RAG containers. Verify that your processes align to the expected GPU memory usage.** 
+**8. Run `nvidia-smi` to see the memory usage of the RAG containers. Verify that your processes align to the expected GPU memory usage.** 
 ```
 $ nvidia-smi
 
@@ -106,7 +111,7 @@ Mon May 19 17:44:11 2025
 
 ```
 
-**8. The final step is to verify the RAG solution, there are a series of steps for this.**
+**9. The final step is to verify the RAG solution, there are a series of steps for this.**
 
 (a) In a new terminal on your local computer, we need to set up a port tunnel to our server. Insert your system's IP in the designated area `user@XX.XXX.XXX.XX`. 
 > What does this command do? We will be using port `9999` on the local computer, and tunneling to the FastAPI user interface that is hosted on the remote system at port `8071`.
