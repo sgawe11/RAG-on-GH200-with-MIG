@@ -33,7 +33,7 @@ git clone https://gitlab-master.nvidia.com/msorkin/rag-on-gh200.git && cd rag-on
 ```
 nvidia-smai -L  # to check the MIG device ids
 cd ~/rag-on-gh200/RAG/examples/local_deploy
-
+```
 Edit the file "docker-compose-nim-ms.yaml" and replace all device_ids fields with your MIG device id
 (for example: device_ids: ['MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4'])
 ```
