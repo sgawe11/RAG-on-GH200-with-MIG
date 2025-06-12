@@ -7,7 +7,6 @@ Welcome to the repository! The intent is to provide clear steps to standing up a
 - NVIDIA Container Toolkit
 - Docker 
 - NVIDIA NGC API Key
-//TODO insert info on ensuring nvidia-ctk and docker have appropiate runtimes steps <br>
 
 
 ## Quickstart 
@@ -20,7 +19,7 @@ To make it easy for you to get started, here's the next steps to quickstart.
 **1. Login to nvcr.io with your NGC API key credentials.**
 
 ```
-$ docker login nvcr.io
+docker login nvcr.io
 - Username: $oauthtoken
 - Password: <Insert NGC key: nvapi-u6hwGp....>
 ```
@@ -33,10 +32,11 @@ git clone https://gitlab-master.nvidia.com/msorkin/rag-on-gh200.git && cd rag-on
 ```
 nvidia-smai -L  # to check the MIG device ids
 cd ~/rag-on-gh200/RAG/examples/local_deploy
+nano docker-compose-nim-ms.yaml
 ```
 Edit the file "docker-compose-nim-ms.yaml" and replace all device_ids fields with your MIG device id
-(for example: device_ids: ['MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4'])
-
+(for example: change reference from device_ids:['0'] to ['device_ids: ['MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4'])
+```
 **4. It's time to set up some environment variables and folders. Run these commands in terminal.**
 ```
 sudo chmod +x env_setup.sh
