@@ -46,15 +46,17 @@ nvidia-smai -L  # to check the MIG device ids
 cd ~/rag-on-gh200/RAG/examples/local_deploy
 nano docker-compose-nim-ms.yaml
 ```
-Edit the file "docker-compose-nim-ms.yaml" and replace all device_ids fields with ythe appropriate MIG device_id
-(for example: change reference to ['device_ids: ['MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4'])
+**5. Edit the file "docker-compose-nim-ms.yaml" and replace all device_ids fields with ythe appropriate MIG device_id.**
 
-**5. It's time to set up some environment variables and folders. Run these commands in terminal.**
+nano docker-compose-nim-ms.yaml
+```
+For example: change reference to device_ids: ['MIG-51fa7c7a-4c41-59bf-b08a-9cb4b47525a7']
+```
+**6. It's time to set up some environment variables and folders. Run these commands in terminal.**
 ```
 sudo chmod +x env_setup.sh
 ./env_setup.sh
 ```
-
 You should see the following output in terminal
 ```
 $ ./env_setup.sh
@@ -71,7 +73,7 @@ nvidia/llama-3.2-nv-rerankqa-1b-v2
 
 ```
 
-**6. Check the uid, and then exit before we run some `sudo chown ...` commands.**
+**7. Check the uid, and then exit before we run some `sudo chown ...` commands.**
 ```
 docker run --rm -it nvcr.io/nim/meta/llama-3.1-8b-instruct:1.8.4 bash
 id
@@ -80,7 +82,7 @@ uid=1000(nim) gid=1000(nim)  ... ...
 exit
 ```
 
-**7. If the `uid` is not `1000`, replace commands with the correct uid values. Else, simply run these commands in terminal.**
+**8. If the `uid` is not `1000`, replace commands with the correct uid values. Else, simply run these commands in terminal.**
 ```
 sudo chown -R 1000:1000 ~/.cache/model-cache
 sudo chmod -R 775 ~/.cache/model-cache
@@ -89,18 +91,17 @@ sudo chmod -R 775 ~/.cache/nim
 ```
 
 
-**8. Everything should be set up! Let's spin up the RAG solution. Run this command to deploy the containers/** 
+**9. Everything should be set up! Let's spin up the RAG solution. Run this command to deploy the containers/** 
 ```
 $ cd RAG/examples/basic_rag/langchain
 USERID=$(id -u) docker compose --profile local-nim --profile nemo-retriever --profile milvus up --build -d
 ```
 
 
-**8. Run `nvidia-smi` to see the memory usage of the RAG containers. Verify that your processes align to the expected GPU memory usage.** 
+**10. Run `nvidia-smi` to see the memory usage of the RAG containers. Verify that your processes align to the expected GPU memory usage.** 
 ```
 $ nvidia-smi
-
-Mon May 19 17:44:11 2025
+     
 +-----------------------------------------------------------------------------------------+
 | NVIDIA-SMI 570.133.20             Driver Version: 570.133.20     CUDA Version: 12.8     |
 |-----------------------------------------+------------------------+----------------------+
@@ -108,24 +109,41 @@ Mon May 19 17:44:11 2025
 | Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
 |                                         |                        |               MIG M. |
 |=========================================+========================+======================|
-|   0  NVIDIA GH200 480GB             Off |   00000009:01:00.0 Off |                    0 |
-| N/A   33C    P0             95W /  900W |   48427MiB /  97871MiB |      0%      Default |
-|                                         |                        |             Disabled |
+|   0  NVIDIA GH200 480GB             Off |   00000009:01:00.0 Off |                   On |
+| N/A   33C    P0            128W /  900W |   29465MiB /  97871MiB |     N/A      Default |
+|                                         |                        |              Enabled |
 +-----------------------------------------+------------------------+----------------------+
 
++-----------------------------------------------------------------------------------------+
+| MIG devices:                                                                            |
++------------------+----------------------------------+-----------+-----------------------+
+| GPU  GI  CI  MIG |                     Memory-Usage |        Vol|        Shared         |
+|      ID  ID  Dev |                       BAR1-Usage | SM     Unc| CE ENC  DEC  OFA  JPG |
+|                  |                                  |        ECC|                       |
+|==================+==================================+===========+=======================|
+|  0    1   0   0  |           29421MiB / 47616MiB    | 60      0 |  3   0    3    0    3 |
+|                  |                 0MiB /     0MiB  |           |                       |
++------------------+----------------------------------+-----------+-----------------------+
+|  0    5   0   1  |              30MiB / 23552MiB    | 32      0 |  2   0    2    0    2 |
+|                  |                 0MiB /     0MiB  |           |                       |
++------------------+----------------------------------+-----------+-----------------------+
+|  0    6   0   2  |              15MiB / 23552MiB    | 26      0 |  1   0    1    0    1 |
+|                  |                 0MiB /     0MiB  |           |                       |
++------------------+----------------------------------+-----------+-----------------------+
+                                                                                         
 +-----------------------------------------------------------------------------------------+
 | Processes:                                                                              |
 |  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
 |        ID   ID                                                               Usage      |
 |=========================================================================================|
-|    0   N/A  N/A          283213      C   /opt/nim/llm/.venv/bin/python3        45126MiB |
-|    0   N/A  N/A          283410      C   milvus                                 1570MiB |
-|    0   N/A  N/A          283908      C   tritonserver                           1712MiB |
+|    0    1    0          3808491      C   /opt/nim/llm/.venv/bin/python3        24402MiB |
+|    0    1    0          3809492      C   tritonserver                           3506MiB |
+|    0    1    0          3810762      C   tritonserver                           1450MiB |
 +-----------------------------------------------------------------------------------------+
 
 ```
 
-**9. The final step is to verify the RAG solution, there are a series of steps for this.**
+**11. The final step is to verify the RAG solution, there are a series of steps for this.**
 
 (a) In a new terminal on your local computer, we need to set up a port tunnel to our server. Insert your system's IP in the designated area `user@XX.XXX.XXX.XX`. 
 > What does this command do? We will be using port `9999` on the local computer, and tunneling to the FastAPI user interface that is hosted on the remote system at port `8071`.
