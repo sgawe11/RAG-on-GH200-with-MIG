@@ -27,7 +27,7 @@ docker login nvcr.io
 
 **2. Clone the repository and navigate into the appropiate directory.**
 ```
-git clone https://gitlab-master.nvidia.com/msorkin/rag-on-gh200.git && cd rag-on-gh200
+ git clone https://github.com/sgawe11/RAG-on-GH200-with-MIG.git
 ```
 **3. Check your MIG device ids.**
 ```
@@ -91,7 +91,7 @@ sudo chmod -R 775 ~/.cache/nim
 
 **9. Everything should be set up! Let's spin up the RAG solution. Run this command to deploy the containers/** 
 ```
-$ cd RAG/examples/basic_rag/langchain
+cd ~/rag-on-gh200/examples/basic_rag/langchain
 USERID=$(id -u) docker compose --profile local-nim --profile nemo-retriever --profile milvus up --build -d
 ```
 
