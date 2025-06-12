@@ -34,8 +34,6 @@ git clone https://gitlab-master.nvidia.com/msorkin/rag-on-gh200.git && cd rag-on
 nvidia-smai -L
 ```
 You should see the following output in terminal
-
-GPU 0: NVIDIA GH200 480GB (UUID: GPU-6983d37f-1b4d-0f55-a108-dde0e8b47d14)
 ```
   MIG 3g.48gb     Device  0: (UUID: MIG-51fa7c7a-4c41-59bf-b08a-9cb4b47525a7)
   MIG 2g.24gb     Device  1: (UUID: MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4)
