@@ -42,7 +42,7 @@ You should see the following output in terminal
 **4. To run this RAG on MIG navigate to the appropriate directory and make the necessary changes to allow MIG devices ids to be recognized.**
 ```
 nvidia-smai -L  # to check the MIG device ids
-cd ~/rag-on-gh200/RAG/examples/local_deploy
+cd ~/RAG-on-GH200-with-MIG/RAG/examples/local_deploy
 ```
 **5. Edit the file "docker-compose-nim-ms.yaml" and replace all device_ids entries with the appropriate MIG device_id.**
 ```
@@ -91,7 +91,7 @@ sudo chmod -R 775 ~/.cache/nim
 
 **9. Everything should be set up! Let's spin up the RAG solution. Run this command to deploy the containers/** 
 ```
-cd ~/rag-on-gh200/examples/basic_rag/langchain
+cd ~/RAG-on-GH200-with-MIG/RAG/examples/basic_rag/langchain
 USERID=$(id -u) docker compose --profile local-nim --profile nemo-retriever --profile milvus up --build -d
 ```
 
