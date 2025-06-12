@@ -7,6 +7,7 @@ Welcome to the repository! The intent is to provide clear steps to standing up a
 - NVIDIA Container Toolkit
 - Docker 
 - NVIDIA NGC API Key
+- Ensure Nvidia MIG is enabled
 
 
 ## Quickstart 
@@ -28,16 +29,27 @@ docker login nvcr.io
 ```
 git clone https://gitlab-master.nvidia.com/msorkin/rag-on-gh200.git && cd rag-on-gh200
 ```
-**3. To run this RAG no MIG navigate to the apprrpriate directory and make the necessary changes to allow MIG devices ids to be recognized.**
+**3. Check your MIG device ids.**
+```
+nvidia-smai -L
+```
+You should see the following output in terminal
+```
+GPU 0: NVIDIA GH200 480GB (UUID: GPU-6983d37f-1b4d-0f55-a108-dde0e8b47d14)
+  MIG 3g.48gb     Device  0: (UUID: MIG-51fa7c7a-4c41-59bf-b08a-9cb4b47525a7)
+  MIG 2g.24gb     Device  1: (UUID: MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4)
+  MIG 1g.24gb     Device  2: (UUID: MIG-6c80966f-629d-5379-803b-55424fc1a0bc)
+```
+**4. To run this RAG no MIG navigate to the apprrpriate directory and make the necessary changes to allow MIG devices ids to be recognized.**
 ```
 nvidia-smai -L  # to check the MIG device ids
 cd ~/rag-on-gh200/RAG/examples/local_deploy
 nano docker-compose-nim-ms.yaml
 ```
-Edit the file "docker-compose-nim-ms.yaml" and replace all device_ids fields with your MIG device id
-(for example: change reference from device_ids:['0'] to ['device_ids: ['MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4'])
+Edit the file "docker-compose-nim-ms.yaml" and replace all device_ids fields with ythe appropriate MIG device_id
+(for example: change reference to ['device_ids: ['MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4'])
 ```
-**4. It's time to set up some environment variables and folders. Run these commands in terminal.**
+**5. It's time to set up some environment variables and folders. Run these commands in terminal.**
 ```
 sudo chmod +x env_setup.sh
 ./env_setup.sh
@@ -59,7 +71,7 @@ nvidia/llama-3.2-nv-rerankqa-1b-v2
 
 ```
 
-**5. Check the uid, and then exit before we run some `sudo chown ...` commands.**
+**6. Check the uid, and then exit before we run some `sudo chown ...` commands.**
 ```
 docker run --rm -it nvcr.io/nim/meta/llama-3.1-8b-instruct:1.8.4 bash
 id
@@ -68,7 +80,7 @@ uid=1000(nim) gid=1000(nim)  ... ...
 exit
 ```
 
-**6. If the `uid` is not `1000`, replace commands with the correct uid values. Else, simply run these commands in terminal.**
+**7. If the `uid` is not `1000`, replace commands with the correct uid values. Else, simply run these commands in terminal.**
 ```
 sudo chown -R 1000:1000 ~/.cache/model-cache
 sudo chmod -R 775 ~/.cache/model-cache
@@ -77,7 +89,7 @@ sudo chmod -R 775 ~/.cache/nim
 ```
 
 
-**7. Everything should be set up! Let's spin up the RAG solution. Run this command to deploy the containers/** 
+**8. Everything should be set up! Let's spin up the RAG solution. Run this command to deploy the containers/** 
 ```
 $ cd RAG/examples/basic_rag/langchain
 USERID=$(id -u) docker compose --profile local-nim --profile nemo-retriever --profile milvus up --build -d
