@@ -48,7 +48,7 @@ nano docker-compose-nim-ms.yaml
 ```
 Edit the file "docker-compose-nim-ms.yaml" and replace all device_ids fields with ythe appropriate MIG device_id
 (for example: change reference to ['device_ids: ['MIG-27b1a30b-e164-5ba8-9904-9d949f65d8e4'])
-```
+
 **5. It's time to set up some environment variables and folders. Run these commands in terminal.**
 ```
 sudo chmod +x env_setup.sh
