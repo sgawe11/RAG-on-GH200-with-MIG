@@ -48,7 +48,7 @@ cd ~/RAG-on-GH200-with-MIG/RAG/examples/local_deploy
 ```
 nano docker-compose-nim-ms.yaml
 ```
-For example: change reference to device_ids: ['MIG-51fa7c7a-4c41-59bf-b08a-9cb4b47525a7']
+For example, device_ids: ['MIG-51fa7c7a-4c41-59bf-b08a-9cb4b47525a7']
 
 **6. It's time to set up some environment variables and folders. Run these commands in terminal.**
 ```
